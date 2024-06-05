@@ -1,0 +1,73 @@
+% created 6/5/24
+
+function generate_wild_bag
+
+alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+vowels = 'AEIO';    
+common_letters = 'TRNDSU';   %include U, which occurs with similar frequency
+remaining_letters = setdiff(alphabet, [vowels, common_letters]);
+
+
+vowel_count = 54; % maintain high # of common vowels, though distribution may change
+common_count = 44;
+remaining_count = 46;
+
+skew = 20;  % can adjust! Skews random generation to high values
+
+% establish range
+vowel_min = fl
+vowel_range = floor(vowel_count / 2);
+common_range = floor(common_count / 2);
+remaining_range = floor(remaining_count / 2);
+
+% Distribute vowels
+
+for ii = 1:length(vowels)
+    if ii < length(vowels)
+        % Distribute random count [skewed high]
+        count = high_randi(, vowel_range, skew);
+    else
+        % Assign remaining count to the last vowel
+        count = vowel_count;
+    end
+    letter_count.(vowels(ii)) = count;
+    vowel_count = vowel_count - count;   
+end
+
+
+% Distribute common letters
+%common_range = floor(common_count / length(common_letters)-2);
+
+for ii = 1:length(common_letters)
+    if ii < length(common_letters)
+        % Distribute random count [skewed high]
+        count = high_randi(4, common_count, skew);
+    else
+        % Assign remaining count to last common letter
+        count = common_count;
+    end
+    letter_count.(common_letters(ii)) = count;
+    common_count = common_count - count;   
+end
+
+
+% Distribute remaining letters
+remaining_range = floor(remaining_count / length(remaining_letters)) + 3;
+
+for ii = 1:length(remaining_letters)
+    if ii < length(remaining_letters)
+        % Distribute random count [skewed high]
+        count = high_randi(0, remaining_count, skew);
+    else
+        % Assign remaining count to last remaining letter
+        count = remaining_count;
+    end
+    letter_count.(remaining_letters(ii)) = count;
+    remaining_count = remaining_count - count;
+end
+
+
+letter_count
+
+end
+

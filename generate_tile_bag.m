@@ -46,29 +46,10 @@ switch mode
 
 
     case 3  % wild bag (144 randomized tiles)
-        alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        vowels = 'AEIO';    
-        common_letters = 'TRNDSU';   %include U, which occurs with similar frequency
-        remaining_letters = setdiff(alphabet, [vowels, common_letters]);
+        letter_count = generate_wild_bag;
+end
 
-        vowel_count = 54; % maintain high # of common vowels, though distribution may change
-        common_count = 44;
-        remaining_count = 46;
-
-        %%% DISTRIBUTE VOWELS
-            vowel_avg = floor(vowel_count / length(vowels));
-            distribute_letters(vowels, vowel_count, vowel_avg);
-
-        %%% DISTRIBUTE COMMON LETTERS
-        common_avg = floor(common_count / length(common_letters));
-        distribute_letters(common_letters, common_count, common_avg);
-
-        %%% DISTRIBUTE REMAINING LETTERS
-        remaining_avg = floor(remaining_count / length(remaining_letters));
-        distribute_letters(remaining_letters, remaining_count, remaining_avg);
-    end
-
-    tile_bag = letter_count;
+tile_bag = letter_count;
 
 end
 
