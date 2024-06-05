@@ -15,19 +15,15 @@ disp('1 - DEFAULT');
 disp('2 - MINI');
 disp('3 - WILD');
 
-% loop until a valid mode is selected
-valid_mode = false;
-
+%%% Loop until a valid mode is selected
 % initialize mode
-    mode = 0;
-    valid_modes = [1, 2, 3];
+mode = 0;
+valid_modes = [1, 2, 3];
 
-while ~ismember()
+while ~ismember(mode, valid_modes)
     mode = input('Select game mode: ');
     
-    if ismember(mode, [1, 2, 3])
-        valid_mode = true;
-    else
+    if ~ismember(mode, valid_modes)
         disp('Please select a valid mode (1, 2, or 3)');
     end
    
@@ -35,6 +31,9 @@ end
 
 
 %%% DEFINE TILE DISTRIBUTION
+% initialize letter_count
+letter_count = struct();
+
 switch mode
     case 1  % default bag (144 tiles)
         letter_count = struct('E',18, 'A',13, 'I',12, 'O',11, 'T',9, 'R',9, ...
@@ -42,68 +41,79 @@ switch mode
             'H',3, 'M',3, 'P',3, 'V',3, 'W',3, 'Y',3, 'J',2, 'K',2, 'Q',2, ...
             'X',2, 'Z',2);
 
+
+
     case 2  % mini bag (78 tiles)
         letter_count = struct('E',9, 'A',7, 'I',6, 'O',5, 'T',5, 'R',5, ...
             'N',4, 'D',3, 'S',3, 'U',3, 'L',3, 'G',2, 'B',2, 'C',2, 'F',2, ...
             'H',2, 'M',2, 'P',2, 'V',2, 'W',2, 'Y',2, 'J',1, 'K',1, 'Q',1, ...
             'X',1, 'Z',1);
 
+
+
     case 3  % wild bag (144 randomized tiles)
         alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
         vowels = 'AEIO';    
         common_letters = 'TRNDSU';   %include U, which occurs with similar frequency
-        remaining_letters = setdiff(alphabet, [vowels, common_consonants]);
+        remaining_letters = setdiff(alphabet, [vowels, common_letters]);
 
         vowel_count = 54; % maintain high # of common vowels, though distribution may change
         common_count = 44;
         remaining_count = 46;
 
-        % initialize letter_count
-        letter_count = struct();
-
-        % distribute vowels
-        total_vowels = 0;
-
+        %%% DISTRIBUTE VOWELS
         for ii = 1:length(vowels) - 1       % for each of 4 vowels, assign a random #
-            %COUNT = random # btwn 0 and remaining available vowels
-            count = randi([0, vowel_count - total_vowels]); 
+            % standard 'limit' per vowel (gives wiggle room)
+            vowels_left = length(vowels) - ii;
+            vowel_avg = floor(vowel_count)/(vowels_left - 1);
+            
+
+            % COUNT = random # btwn 0 and avg expected value
+            count = randi([0, vowel_avg]); 
 
             % put 'COUNT' many 'A's (or other vowel) into letter_count
             letter_count.(vowels(ii)) = count;   
 
-            % update # total_vowels
-            total_vowels = total_vowels + count;
+            % update # vowel_count left
+            vowel_count = vowel_count - count;
     
         end
-        letter_count.(vowels(end)) = vowel_count - total_vowels;
+        letter_count.(vowels(end)) = vowel_count;
        
 
-        % distribute common letters
-        total_common = 0;
-
+        % DISTRIBUTE COMMON LETTERS
         for ii = 1:length(common_letters) - 1
-            count = randi([0, common_count - total_common]);
+            % standard 'limit' per common letter
+            common_avg = floor(common_count)/(numel(common_letters)-1);
+
+            % COUNT = random # btwn 0 and avg expected value
+            count = randi([0, common_avg]);
+
             % put 'COUNT' many of each common letter into letter_count
             letter_count.(common_letters(ii)) = count;
 
-            % update # total_common
-            total_common = total_common + count;
+            % update # common_count left
+            common_count = common_count - count;
         end
-        letter_count.(common_letters(end)) = common_count - total_common;
+        letter_count.(common_letters(end)) = common_count;
 
         
-        % distribute remaining letters
-        total_remaining = 0;
+        % DISTRIBUTE REMAINING LETTERS
         for ii = 1:length(remaining_letters) - 1
-            count = randi([0, remaining_count - total_remaining]);
+            % standard 'limit' per remaining letter
+            remaining_avg = floor(remaining_count)/(numel(remaining_letters)-1);
+
+            % COUNT = random # btwn 0 and avg expected value
+            count = randi([0, remaining_avg]);
+
             % put 'COUNT' many of each remaining letter into letter_count
             letter_count.(remaining_letters(ii)) = count;
 
-            % update # total_remaining
-            total_remaining = total_remaining + count;
-
+            % update # remaining_count left 
+            remaining_count = remaining_count - count;
         end
-        letter_count.(remaining_letters(end)) = remaining_count - total_remaining;
+        letter_count.(remaining_letters(end)) = remaining_count;
+end
 
 tile_bag = letter_count;
-end
+

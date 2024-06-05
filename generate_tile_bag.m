@@ -16,22 +16,18 @@ disp('2 - MINI');
 disp('3 - WILD');
 
 %%% Loop until a valid mode is selected
-
 % initialize mode
-mode = 0;
-valid_modes = [1, 2, 3];
-
-while ~ismember(mode, valid_modes)
-    mode = input('Select game mode: ');
-    
-    if ~ismember(mode, valid_modes)
+mode = input('Select game mode: ');
+    while ~ismember(mode, [1, 2, 3])
         disp('Please select a valid mode (1, 2, or 3)');
+        mode = input('Select game mode: ');
     end
-   
-end
 
 
 %%% DEFINE TILE DISTRIBUTION
+% initialize letter_count
+letter_count = struct();
+
 switch mode
     case 1  % default bag (144 tiles)
         letter_count = struct('E',18, 'A',13, 'I',12, 'O',11, 'T',9, 'R',9, ...
@@ -47,6 +43,8 @@ switch mode
             'H',2, 'M',2, 'P',2, 'V',2, 'W',2, 'Y',2, 'J',1, 'K',1, 'Q',1, ...
             'X',1, 'Z',1);
 
+
+
     case 3  % wild bag (144 randomized tiles)
         alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
         vowels = 'AEIO';    
@@ -57,53 +55,21 @@ switch mode
         common_count = 44;
         remaining_count = 46;
 
-        % initialize letter_count
-        letter_count = struct();
+        %%% DISTRIBUTE VOWELS
+            vowel_avg = floor(vowel_count / length(vowels));
+            distribute_letters(vowels, vowel_count, vowel_avg);
 
-        % distribute vowels
-        total_vowels = 0;
+        %%% DISTRIBUTE COMMON LETTERS
+        common_avg = floor(common_count / length(common_letters));
+        distribute_letters(common_letters, common_count, common_avg);
 
-        for ii = 1:length(vowels) - 1       % for each of 4 vowels, assign a random #
-            %COUNT = random # btwn 0 and remaining available vowels
-            count = randi([0, vowel_count - total_vowels]); 
+        %%% DISTRIBUTE REMAINING LETTERS
+        remaining_avg = floor(remaining_count / length(remaining_letters));
+        distribute_letters(remaining_letters, remaining_count, remaining_avg);
+    end
 
-            % put 'COUNT' many 'A's (or other vowel) into letter_count
-            letter_count.(vowels(ii)) = count;   
+    tile_bag = letter_count;
 
-            % update # total_vowels
-            total_vowels = total_vowels + count;
-    
-        end
-        letter_count.(vowels(end)) = vowel_count - total_vowels;
-       
-
-        % distribute common letters
-        total_common = 0;
-
-        for ii = 1:length(common_letters) - 1
-            count = randi([0, common_count - total_common]);
-            % put 'COUNT' many of each common letter into letter_count
-            letter_count.(common_letters(ii)) = count;
-
-            % update # total_common
-            total_common = total_common + count;
-        end
-        letter_count.(common_letters(end)) = common_count - total_common;
-
-        
-        % distribute remaining letters
-        total_remaining = 0;
-        for ii = 1:length(remaining_letters) - 1
-            count = randi([0, remaining_count - total_remaining]);
-            % put 'COUNT' many of each remaining letter into letter_count
-            letter_count.(remaining_letters(ii)) = count;
-
-            % update # total_remaining
-            total_remaining = total_remaining + count;
-
-        end
-        letter_count.(remaining_letters(end)) = remaining_count - total_remaining;
 end
 
-tile_bag = letter_count;
 
