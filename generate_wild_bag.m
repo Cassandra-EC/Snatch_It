@@ -1,6 +1,6 @@
 % created 6/5/24
 
-function generate_wild_bag
+function letter_count = generate_wild_bag
 
 alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 vowels = 'AEIO';    
@@ -63,7 +63,7 @@ for ii = 1:length(remaining_letters)
 end
 
 
-letter_count
+% disp(letter_count); [debugging line]
 
 end
 

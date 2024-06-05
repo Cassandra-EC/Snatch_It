@@ -6,7 +6,7 @@
 function [minimum, maximum] = tiny_range(avg, total)
    
 % How much to deviate from center value?
-deviation = floor(total/avg);
+deviation = floor(avg/2);
 
 maximum = avg + deviation;
 minimum = avg - deviation;
