@@ -15,16 +15,19 @@ disp('1 - DEFAULT');
 disp('2 - MINI');
 disp('3 - WILD');
 
-%%% Loop until a valid mode is selected
+% loop until a valid mode is selected
+valid_mode = false;
 
 % initialize mode
-mode = 0;
-valid_modes = [1, 2, 3];
+    mode = 0;
+    valid_modes = [1, 2, 3];
 
-while ~ismember(mode, valid_modes)
+while ~ismember()
     mode = input('Select game mode: ');
     
-    if ~ismember(mode, valid_modes)
+    if ismember(mode, [1, 2, 3])
+        valid_mode = true;
+    else
         disp('Please select a valid mode (1, 2, or 3)');
     end
    
@@ -39,8 +42,6 @@ switch mode
             'H',3, 'M',3, 'P',3, 'V',3, 'W',3, 'Y',3, 'J',2, 'K',2, 'Q',2, ...
             'X',2, 'Z',2);
 
-
-
     case 2  % mini bag (78 tiles)
         letter_count = struct('E',9, 'A',7, 'I',6, 'O',5, 'T',5, 'R',5, ...
             'N',4, 'D',3, 'S',3, 'U',3, 'L',3, 'G',2, 'B',2, 'C',2, 'F',2, ...
@@ -51,7 +52,7 @@ switch mode
         alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
         vowels = 'AEIO';    
         common_letters = 'TRNDSU';   %include U, which occurs with similar frequency
-        remaining_letters = setdiff(alphabet, [vowels, common_letters]);
+        remaining_letters = setdiff(alphabet, [vowels, common_consonants]);
 
         vowel_count = 54; % maintain high # of common vowels, though distribution may change
         common_count = 44;
@@ -103,7 +104,6 @@ switch mode
 
         end
         letter_count.(remaining_letters(end)) = remaining_count - total_remaining;
-end
 
 tile_bag = letter_count;
-
+end
