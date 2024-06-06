@@ -21,19 +21,20 @@ idx = randi(num_letters);
 % draw letter according to random index value
 drawn_letter = letters{idx};
 
+
+
 %%% REMOVE DRAWN LETTER FROM TILE BAG
 % subtract drawn letter from tile bag
 tile_bag.(drawn_letter) = tile_bag.(drawn_letter) - 1;
 
 % if none of a letter is left, remove its field from tile bag
-if tile_bag.(drawn_letter) == 0
+if tile_bag.(drawn_letter) <= 0
     tile_bag = rmfield(tile_bag, drawn_letter);
 end
 
 
 %%% RETURN NEW LETTER
 new_letter = drawn_letter;
-
 
 
 

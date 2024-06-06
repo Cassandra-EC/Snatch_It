@@ -14,12 +14,13 @@ disp('TILE BAG OPTIONS: ');
 disp('1 - DEFAULT');
 disp('2 - MINI');
 disp('3 - WILD');
+disp('4 - X-SMALL');
 
 %%% Loop until a valid mode is selected
 % initialize mode
 mode = input('Select game mode: ');
-    while ~ismember(mode, [1, 2, 3])
-        disp('Please select a valid mode (1, 2, or 3)');
+    while ~ismember(mode, [1, 2, 3, 4])
+        disp('Please select a valid mode (1, 2, 3, or 4)');
         mode = input('Select game mode: ');
     end
 
@@ -47,6 +48,10 @@ switch mode
 
     case 3  % wild bag (144 randomized tiles)
         letter_count = generate_wild_bag;
+
+
+    case 4 %x-small bag (8 tiles)
+        letter_count = struct('E',2, 'A',2, 'T',1, 'R',1, 'D',1, 'S',1);
 end
 
 tile_bag = letter_count;
