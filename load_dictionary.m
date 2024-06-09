@@ -1,8 +1,9 @@
-function SCOWL_dictionary = load_dictionary(filename)
-%%% SUMMARY: open dictionary 'en_US.dic' sourced from SCOWL
+function dictionary = load_dictionary(filename)
+%%% SUMMARY: load desired wordlist and separate words into individual cells
+% for snatch_it, use the ENABLE dictionary
 
-%%% open SCOWL dictionary
-fid = fopen('en_US.dic', 'r');
+%%% open dictionary
+fid = fopen(filename, 'r');
 % failure to open returns error message
 if fid == -1
     error('Could not open dictionary file');
@@ -19,13 +20,12 @@ fclose(fid);
 % process each new line
 for ii = 1:length(words)
     parts = strsplit(words{ii}, {'/', ' '});
-    SCOWL_dictionary{ii} = upper(parts{1}); %convert all parts to uppercase
+    dictionary{ii} = upper(parts{1}); %convert all parts to uppercase
 end
 
 
 % Remove duplicates (if any)
-    SCOWL_dictionary = unique(SCOWL_dictionary);
-
+    dictionary = unique(dictionary);
 
 
 end
